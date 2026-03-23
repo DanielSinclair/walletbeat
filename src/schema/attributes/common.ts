@@ -17,7 +17,7 @@ import type { AtLeastOneVariant, Variant } from '../variants'
 /**
  * Helper for constructing Evaluation with "Unrated" Outcome.
  */
-export function unrated(ctx: EvaluationContext<{}>): Evaluation<{}>
+export function unrated(ctx: EvaluationContext): Evaluation
 export function unrated<_OutcomeMetadata extends OutcomeMetadata>(
 	ctx: EvaluationContext<_OutcomeMetadata>,
 	metadata: Outcome<_OutcomeMetadata>['metadata'],
@@ -33,8 +33,8 @@ export function unrated<_OutcomeMetadata extends OutcomeMetadata>(
 			verifiability: Verifiability.SELF_EVIDENT,
 			displayName: `${ctx.attribute.displayName}: Unrated`,
 			shortExplanation: sentence('Walletbeat lacks the information needed to determine this.'),
-			...(metadata !== undefined && { metadata }),
-		},
+			...(metadata && { metadata }),
+		} as Outcome<_OutcomeMetadata>, // type assertion needed to enforce presence or non-presence of `metadata`
 		details: unratedAttributeContent<_OutcomeMetadata>(),
 	}
 }
@@ -43,9 +43,9 @@ export function unrated<_OutcomeMetadata extends OutcomeMetadata>(
  * Helper for constructing Evaluation with "Exempt" Outcome.
  */
 export function exempt(
-	ctx: EvaluationContext<{}>,
+	ctx: EvaluationContext<null>,
 	whyExempt: Sentence<WalletNameStrings>,
-): ExemptEvaluation<{}>
+): ExemptEvaluation<null>
 export function exempt<_OutcomeMetadata extends OutcomeMetadata>(
 	ctx: EvaluationContext<_OutcomeMetadata>,
 	whyExempt: Sentence<WalletNameStrings>,
@@ -63,8 +63,8 @@ export function exempt<_OutcomeMetadata extends OutcomeMetadata>(
 			verifiability: Verifiability.SELF_EVIDENT,
 			displayName: `${ctx.attribute.displayName}: Exempt`,
 			shortExplanation: whyExempt,
-			...(metadata !== undefined && { metadata }),
-		},
+			...(metadata && { metadata }),
+		} as Outcome<_OutcomeMetadata, Rating.EXEMPT>, // type assertion needed to enforce presence or non-presence of `metadata`
 		details: whyExempt,
 	}
 }
