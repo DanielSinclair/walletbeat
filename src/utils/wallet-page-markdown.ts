@@ -7,9 +7,9 @@ import {
 import {
 	type AttributeGroup,
 	type EvaluatedGroup,
+	type OutcomeMetadataSet,
 	Rating,
 	ratingToText,
-	type ValueSet,
 } from '@/schema/attributes'
 import { toFullyQualified } from '@/schema/reference'
 import {
@@ -184,7 +184,7 @@ export function walletPageMarkdown(wallet: RatedWallet, siteUrl: string): string
 
 	const groupLines = mapNonExemptAttributeGroupsInTree(
 		wallet.overall,
-		<Vs extends ValueSet>(
+		<Vs extends OutcomeMetadataSet>(
 			attrGroup: AttributeGroup<Vs>,
 			evalGroup: EvaluatedGroup<Vs>,
 		): string[] => {

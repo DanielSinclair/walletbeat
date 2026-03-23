@@ -9,8 +9,8 @@ import type {
 	AttributeGroup,
 	EvaluatedAttribute,
 	EvaluatedGroup,
-	Value,
-	ValueSet,
+	OutcomeMetadata,
+	OutcomeMetadataSet,
 	WalletNameAndPseudonymStrings,
 } from '@/schema/attributes'
 import { type ResolvedFeatures } from '@/schema/features'
@@ -218,8 +218,8 @@ function serializeResolvedFeatures(features: ResolvedFeatures): unknown {
 	return serializeFeatureValue(features)
 }
 
-function serializeAttribute<V extends Value>(
-	evaluatedAttribute: EvaluatedAttribute<V>,
+function serializeAttribute<_OutcomeMetadata extends OutcomeMetadata>(
+	evaluatedAttribute: EvaluatedAttribute<_OutcomeMetadata>,
 	evalStrings: WalletNameAndPseudonymStrings,
 ): AttributeExportBlock {
 	const { attribute, evaluation } = evaluatedAttribute
@@ -277,7 +277,10 @@ function serializeEvaluationTree(
 
 	const pairs = mapNonExemptAttributeGroupsInTree(
 		tree,
-		<Vs extends ValueSet>(attrGroup: AttributeGroup<Vs>, evalGroup: EvaluatedGroup<Vs>) => {
+		<Vs extends OutcomeMetadataSet>(
+			attrGroup: AttributeGroup<Vs>,
+			evalGroup: EvaluatedGroup<Vs>,
+		) => {
 			const entries = mapNonExemptGroupAttributes(
 				evalGroup,
 				evalAttr => [evalAttr.attribute.id, serializeAttribute(evalAttr, evalStrings)] as const,
