@@ -6,11 +6,11 @@ import { type Evaluation, type OutcomeMetadata, Rating, ratingToText } from '@/s
 import { warmupHarperLinter } from './utils/grammar'
 
 function isSampleEvaluation(e: unknown): e is Evaluation<OutcomeMetadata> {
-	if (typeof e !== 'object' || e === null || !('value' in e)) {
+	if (typeof e !== 'object' || e === null || !('outcome' in e)) {
 		return false
 	}
 
-	const v = (e as { value: unknown }).value
+	const v = (e as { outcome: unknown }).outcome
 
 	return (
 		typeof v === 'object' &&
@@ -76,7 +76,7 @@ describe('attribute', () => {
 											const evaluations = exampleRating.sampleEvaluations.filter(isSampleEvaluation)
 
 											for (const sampleEvaluation of evaluations) {
-												const { id, rating: sampleRating } = sampleEvaluation.value
+												const { id, rating: sampleRating } = sampleEvaluation.outcome
 
 												describe(id, () => {
 													it('matches the correct rating', () => {
